@@ -77,7 +77,7 @@
       // Update participants list
       function updateParticipantsList() {
         var listItems = participants.map(function(participant) {
-          return '<li>' + participant + '<button class="btn btn-danger removeButton" data-name="' + participant + '"><i class="fa fa-times"></i></button></li>';
+          return '<li>' + participant + '<button class="btn btn-danger removeButton" data-name="' + participant + '">x</button></li>';
         });
         $('#participantsList').html(listItems.join(''));
       }
