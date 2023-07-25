@@ -1,28 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Icebreaker</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Icebreaker</title>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 <body>
+<div class="container">
   <h1>Icebreaker</h1>
-  <form id="icebreakerForm">
-    <label for="participantInput">Participant Name:</label>
-    <input type="text" id="participantInput">
-    <br>
-    <input type="submit" value="Add Participant">
-  </form>
-  <h3>Participants:</h3>
-  <ul id="participantsList"></ul>
+  <div class="container-fluid text-sm-center p-5 text-light bg-dark rounded-3">
+	<h3 class="display-4" id="questionDisplay"></h3>
+	<button id="nextQuestionButton">Next Question for Same Participant</button>
+	<button id="startButton">Refresh</button>
+  </div>
+	<h2>Configuration</h2>
+	<div class="row">
+		<div class="col">
+			<div  class="card">
+				<div class="card-header">How this works</div>
+				<div class="card-body">
+					<p class="card-text">Every time the page is refreshed or you add a participant or hit submit, it will randomize the list of users and select a random question from the list of questions.</p>
+					<p class="card-text">You can add or remove participants to return to the default list (Full <?php echo strtoupper($team);?> team) you can remove all participants.</p>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div  class="card">
+				<div class="card-header">Participants</div>
+				<div class="card-body">
+					<ul id="participantsList"></ul>
+					<form id="icebreakerForm">
+						<label for="participantInput">Participant Name:</label>
+						<input type="text" id="participantInput">
+						<input type="submit" value="Add">
+					</form>
+				</div>
+			</div>	
+		</div>
+	</div>	
+   
   <button id="shareButton">Share Icebreaker with Participants</button>
-  <br>
-  <button id="startButton">Start Icebreaker</button>
-  <hr>
-  <h3 id="questionDisplay"></h3>
-
+  
+</div>
   <script>
     $(document).ready(function() {
       var participants = [];
+      var currentParticipant = null;
 
       // Check URL for participants
       var urlParams = new URLSearchParams(window.location.search);
@@ -114,6 +140,7 @@
           var randomParticipant = participants[Math.floor(Math.random() * participants.length)];
           var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
 
+          currentParticipant = randomParticipant;
           $('#questionDisplay').text(randomParticipant + ', ' + randomQuestion);
         });
       }
@@ -139,7 +166,32 @@
           var randomParticipant = participants[Math.floor(Math.random() * participants.length)];
           var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
 
+          currentParticipant = randomParticipant;
           $('#questionDisplay').text(randomParticipant + ', ' + randomQuestion);
+        });
+      });
+
+      // Ask another question to the same participant
+      $('#nextQuestionButton').click(function() {
+        if (!currentParticipant) {
+          alert('Please start the icebreaker first.');
+          return;
+        }
+
+        // Load questions from file
+        $.get('questions.txt', function(data) {
+          var questions = data.split('\n').filter(function(question) {
+            return question.trim() !== '';
+          });
+
+          if (questions.length === 0) {
+            alert('No questions found.');
+            return;
+          }
+
+          var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+
+          $('#questionDisplay').text(currentParticipant + ', ' + randomQuestion);
         });
       });
     });
