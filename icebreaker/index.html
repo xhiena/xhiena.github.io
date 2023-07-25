@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Icebreaker</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+  <h1>Icebreaker</h1>
+  <form id="icebreakerForm">
+    <label for="participantInput">Participant Name:</label>
+    <input type="text" id="participantInput">
+    <br>
+    <input type="submit" value="Add Participant">
+  </form>
+  <h3>Participants:</h3>
+  <ul id="participantsList"></ul>
+  <button id="shareButton">Share Icebreaker with Participants</button>
+  <br>
+  <button id="startButton">Start Icebreaker</button>
+  <hr>
+  <h3 id="questionDisplay"></h3>
+
+  <script>
+    $(document).ready(function() {
+      var participants = [];
+
+      // Check URL for participants
+      var urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('participants')) {
+        participants = urlParams.get('participants').split(',');
+        updateParticipantsList();
+        startIcebreaker(); // Automatically start icebreaker with existing participants
+      }
+
+      // Add participant
+      $('#icebreakerForm').submit(function(e) {
+        e.preventDefault();
+        var participantName = $('#participantInput').val();
+        if (participantName !== '') {
+          participants.push(participantName);
+          updateParticipantsList();
+          updateURLParams();
+          $('#participantInput').val('');
+          alert('Participant added successfully!');
+        }
+      });
+
+      // Update participants list
+      function updateParticipantsList() {
+        var listItems = participants.map(function(participant) {
+          return '<li>' + participant + '</li>';
+        });
+        $('#participantsList').html(listItems.join(''));
+      }
+
+      // Share participants
+      $('#shareButton').click(function() {
+        if (participants.length > 0) {
+          var participantsText = participants.join(',');
+          var shareURL = window.location.origin + window.location.pathname + '?participants=' + encodeURIComponent(participantsText);
+          copyToClipboard(shareURL);
+          alert('Participants list URL copied to clipboard!');
+        } else {
+          alert('No participants to share.');
+        }
+      });
+
+      // Copy text to clipboard
+      function copyToClipboard(text) {
+        var textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+
+      // Update URL with participants
+      function updateURLParams() {
+        var participantsText = participants.join(',');
+        var newURL = window.location.origin + window.location.pathname + '?participants=' + encodeURIComponent(participantsText);
+        window.history.replaceState({}, '', newURL);
+      }
+
+      // Start icebreaker with existing participants
+      function startIcebreaker() {
+        if (participants.length < 2) {
+          alert('Please add at least two participants.');
+          return;
+        }
+
+        // Load questions from file
+        $.get('questions.txt', function(data) {
+          var questions = data.split('\n').filter(function(question) {
+            return question.trim() !== '';
+          });
+
+          if (questions.length === 0) {
+            alert('No questions found.');
+            return;
+          }
+
+          var randomParticipant = participants[Math.floor(Math.random() * participants.length)];
+          var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+
+          $('#questionDisplay').text(randomParticipant + ', ' + randomQuestion);
+        });
+      }
+
+      // Start icebreaker
+      $('#startButton').click(function() {
+        if (participants.length < 2) {
+          alert('Please add at least two participants.');
+          return;
+        }
+
+        // Load questions from file
+        $.get('questions.txt', function(data) {
+          var questions = data.split('\n').filter(function(question) {
+            return question.trim() !== '';
+          });
+
+          if (questions.length === 0) {
+            alert('No questions found.');
+            return;
+          }
+
+          var randomParticipant = participants[Math.floor(Math.random() * participants.length)];
+          var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+
+          $('#questionDisplay').text(randomParticipant + ', ' + randomQuestion);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
