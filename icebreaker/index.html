@@ -48,10 +48,21 @@
       // Update participants list
       function updateParticipantsList() {
         var listItems = participants.map(function(participant) {
-          return '<li>' + participant + '</li>';
+          return '<li>' + participant + '<button class="removeButton" data-name="' + participant + '">Remove</button></li>';
         });
         $('#participantsList').html(listItems.join(''));
       }
+
+      // Remove participant
+      $(document).on('click', '.removeButton', function() {
+        var participantToRemove = $(this).data('name');
+        participants = participants.filter(function(participant) {
+          return participant !== participantToRemove;
+        });
+        updateParticipantsList();
+        updateURLParams();
+        alert('Participant removed successfully!');
+      });
 
       // Share participants
       $('#shareButton').click(function() {
