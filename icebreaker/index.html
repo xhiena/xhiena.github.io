@@ -67,14 +67,17 @@
           updateParticipantsList();
           updateURLParams();
           $('#participantInput').val('');
-          alert('Participant added successfully!');
+          //alert('Participant added successfully!');
+		  if (participants.length >= 2) {
+			startIcebreaker();
+		  }
         }
       });
 
       // Update participants list
       function updateParticipantsList() {
         var listItems = participants.map(function(participant) {
-          return '<li>' + participant + '<button class="removeButton" data-name="' + participant + '">Remove</button></li>';
+          return '<li>' + participant + '<button class="btn btn-danger removeButton" data-name="' + participant + '"><i class="fa fa-times"></i></button></li>';
         });
         $('#participantsList').html(listItems.join(''));
       }
@@ -87,7 +90,7 @@
         });
         updateParticipantsList();
         updateURLParams();
-        alert('Participant removed successfully!');
+        //alert('Participant removed successfully!');
       });
 
       // Share participants
