@@ -53,8 +53,8 @@
         $('#participantsList').html(listItems.join(''));
       }
 
-      // Remove participant
-      $(document).on('click', '.removeButton', function() {
+      // Event delegation for removing participants
+      $('#participantsList').on('click', '.removeButton', function() {
         var participantToRemove = $(this).data('name');
         participants = participants.filter(function(participant) {
           return participant !== participantToRemove;
