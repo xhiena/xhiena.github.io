@@ -52,9 +52,14 @@
       // Check URL for participants
       var urlParams = new URLSearchParams(window.location.search);
       if (urlParams.has('participants')) {
-        participants = urlParams.get('participants').split(',');
+        participantsUrl = urlParams.get('participants');
+        if(participantsUrl.length!=0){
+          participants=participantsUrl.split(',');
+        }
         updateParticipantsList();
-        startIcebreaker(); // Automatically start icebreaker with existing participants
+        if (participants.length >= 2) {
+          startIcebreaker(); // Automatically start icebreaker with existing participants
+        }
       }
 
       // Add participant
