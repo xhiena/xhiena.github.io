@@ -1,207 +1,59 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Icebreaker</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="icebreaker.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
 <body>
-<div class="container">
-  <h1>Icebreaker</h1>
-  <div class="container-fluid text-sm-center p-5 text-light bg-dark rounded-3">
-	<h3 class="display-4" id="questionDisplay"></h3>
-	<button class="btn btn-secondary" id="nextQuestionButton"><i class="fa fa-refresh"></i> New question for same participant</button>
-	<button class="btn btn-success" id="startButton"><i class="fa fa-refresh"></i> New question</button>
+  <div class="container">
+    <h1>Icebreaker</h1>
+    <div class="container-fluid text-sm-center p-5 text-light bg-dark rounded-3">
+      <h3 class="display-4" id="questionDisplay"></h3>
+      <button class="btn btn-secondary" id="nextQuestionButton"><i class="fa fa-refresh"></i> New question for same
+        participant</button>
+      <button class="btn btn-success" id="startButton"><i class="fa fa-refresh"></i> New question</button>
+    </div>
+    <h2>Configuration</h2>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-header"><i class="fa fa-question-circle"></i> How this works</div>
+          <div class="card-body">
+            <p class="card-text">Every time the page is refreshed or you add a participant or hit submit, it will
+              randomize the list of users and select a random question from the list of questions.</p>
+            <p class="card-text">You can add or remove participants, to be able to ask questions, 2 participants are
+              needed.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-header"><i class="fa fa-users"></i> Participants</div>
+          <div class="card-body">
+            <ul id="participantsList"></ul>
+            <form id="icebreakerForm">
+              <label for="participantInput">Participant Name:</label>
+              <input type="text" id="participantInput">
+              <button class="btn btn-primary" type="submit"><i class="fa fa-user-plus"></i> Add</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-info" id="shareButton"><i class="fa fa-info-circle"></i> Share Icebreaker with
+      Participants</button>
   </div>
-	<h2>Configuration</h2>
-	<div class="row">
-		<div class="col">
-			<div  class="card">
-				<div class="card-header"><i class="fa fa-question-circle"></i> How this works</div>
-				<div class="card-body">
-					<p class="card-text">Every time the page is refreshed or you add a participant or hit submit, it will randomize the list of users and select a random question from the list of questions.</p>
-					<p class="card-text">You can add or remove participants, to be able to ask questions, 2 participants are needed.</p>
-				</div>
-			</div>
-		</div>
-		<div class="col">
-			<div  class="card">
-				<div class="card-header"><i class="fa fa-users"></i> Participants</div>
-				<div class="card-body">
-					<ul id="participantsList"></ul>
-					<form id="icebreakerForm">
-						<label for="participantInput">Participant Name:</label>
-						<input type="text" id="participantInput">
-						<button class="btn btn-primary" type="submit"><i class="fa fa-user-plus"></i> Add</button>
-					</form>
-				</div>
-			</div>	
-		</div>
-	</div>	
-  <button class="btn btn-info" id="shareButton"><i class="fa fa-info-circle"></i> Share Icebreaker with Participants</button>
-</div>
-  <script>
-    $(document).ready(function() {
-      var participants = [];
-      var currentParticipant = null;
-
-      // Check URL for participants
-      var urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('participants')) {
-        participantsUrl = urlParams.get('participants');
-        if(participantsUrl.length!=0){
-          participants=participantsUrl.split(',');
-        }
-        updateParticipantsList();
-        if (participants.length >= 2) {
-          startIcebreaker(); // Automatically start icebreaker with existing participants
-        }
-      }
-
-      // Add participant
-      $('#icebreakerForm').submit(function(e) {
-        e.preventDefault();
-        var participantName = $('#participantInput').val();
-        if (participantName !== '') {
-          participants.push(participantName);
-          updateParticipantsList();
-          updateURLParams();
-          $('#participantInput').val('');
-          //alert('Participant added successfully!');
-          if (participants.length >= 2) {
-            startIcebreaker();
-          }
-        }
-      });
-
-      // Update participants list
-      function updateParticipantsList() {
-        var listItems = participants.map(function(participant) {
-          return '<li>' + participant + ' <i class="fa fa-times removeButton" data-name="' + participant + '"></i></li>';
-        });
-        $('#participantsList').html(listItems.join(''));
-      }
-
-      // Event delegation for removing participants
-      $('#participantsList').on('click', '.removeButton', function() {
-        var participantToRemove = ''+$(this).data('name');
-        participants = participants.filter(function(participant) {
-          return participant !== participantToRemove;
-        });
-        updateParticipantsList();
-        updateURLParams();
-        //alert('Participant removed successfully!');
-      });
-
-      // Share participants
-      $('#shareButton').click(function() {
-        if (participants.length > 0) {
-          var participantsText = participants.join(',');
-          var shareURL = window.location.origin + window.location.pathname + '?participants=' + encodeURIComponent(participantsText);
-          copyToClipboard(shareURL);
-          alert('Participants list URL copied to clipboard!');
-        } else {
-          alert('No participants to share.');
-        }
-      });
-
-      // Copy text to clipboard
-      function copyToClipboard(text) {
-        var textArea = document.createElement('textarea');
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-      }
-
-      // Update URL with participants
-      function updateURLParams() {
-        var participantsText = participants.join(',');
-        var newURL = window.location.origin + window.location.pathname + '?participants=' + encodeURIComponent(participantsText);
-        window.history.replaceState({}, '', newURL);
-      }
-
-      // Start icebreaker with existing participants
-      function startIcebreaker() {
-        if (participants.length < 2) {
-          alert('Please add at least two participants.');
-          return;
-        }
-
-        // Load questions from file
-        $.get('questions.txt', function(data) {
-          var questions = data.split('\n').filter(function(question) {
-            return question.trim() !== '';
-          });
-
-          if (questions.length === 0) {
-            alert('No questions found.');
-            return;
-          }
-
-          var randomParticipant = participants[Math.floor(Math.random() * participants.length)];
-          var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-
-          currentParticipant = randomParticipant;
-          $('#questionDisplay').text(randomParticipant + ', ' + randomQuestion);
-        });
-      }
-
-      // Start icebreaker
-      $('#startButton').click(function() {
-        if (participants.length < 2) {
-          alert('Please add at least two participants.');
-          return;
-        }
-
-        // Load questions from file
-        $.get('questions.txt', function(data) {
-          var questions = data.split('\n').filter(function(question) {
-            return question.trim() !== '';
-          });
-
-          if (questions.length === 0) {
-            alert('No questions found.');
-            return;
-          }
-
-          var randomParticipant = participants[Math.floor(Math.random() * participants.length)];
-          var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-
-          currentParticipant = randomParticipant;
-          $('#questionDisplay').text(randomParticipant + ', ' + randomQuestion);
-        });
-      });
-
-      // Ask another question to the same participant
-      $('#nextQuestionButton').click(function() {
-        if (!currentParticipant) {
-          alert('Please start the icebreaker first.');
-          return;
-        }
-
-        // Load questions from file
-        $.get('questions.txt', function(data) {
-          var questions = data.split('\n').filter(function(question) {
-            return question.trim() !== '';
-          });
-
-          if (questions.length === 0) {
-            alert('No questions found.');
-            return;
-          }
-
-          var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-
-          $('#questionDisplay').text(currentParticipant + ', ' + randomQuestion);
-        });
-      });
-    });
-  </script>
 </body>
+
 </html>
