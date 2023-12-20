@@ -42,9 +42,7 @@
 			</div>	
 		</div>
 	</div>	
-   
   <button class="btn btn-info" id="shareButton"><i class="fa fa-info-circle"></i> Share Icebreaker with Participants</button>
-  
 </div>
   <script>
     $(document).ready(function() {
@@ -69,9 +67,9 @@
           updateURLParams();
           $('#participantInput').val('');
           //alert('Participant added successfully!');
-		  if (participants.length >= 2) {
-			startIcebreaker();
-		  }
+          if (participants.length >= 2) {
+            startIcebreaker();
+          }
         }
       });
 
@@ -85,7 +83,7 @@
 
       // Event delegation for removing participants
       $('#participantsList').on('click', '.removeButton', function() {
-        var participantToRemove = $(this).data('name');
+        var participantToRemove = ''+$(this).data('name');
         participants = participants.filter(function(participant) {
           return participant !== participantToRemove;
         });
