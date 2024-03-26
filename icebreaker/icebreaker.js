@@ -2,6 +2,7 @@ $(document).ready(function () {
     var participants = [];
     var currentParticipant = null;
     var questions=[];
+    var salutes=[]
     
 
     // Add participant
@@ -67,10 +68,6 @@ $(document).ready(function () {
         var newURL = window.location.origin + window.location.pathname + '?participants=' + encodeURIComponent(participantsText);
         window.history.replaceState({}, '', newURL);
     }
-    
-    function getQuestionsFromFile(){
-        
-    }
 
     function getQuestion(){
         return questions[Math.floor(Math.random() * questions.length)];
@@ -80,7 +77,8 @@ $(document).ready(function () {
     }
     // Start icebreaker with existing participants
     function showQuestion(q){
-        $('#questionDisplay h3').text(currentParticipant);
+        randomGreeting=greetingsArray[Math.floor(Math.random() * greetingsArray.length)];
+        $('#questionDisplay h3').text(randomGreeting.replace("%NAME%",currentParticipant));
         $('#questionDisplay p').text(q);
     }
     function startIcebreaker() {
@@ -130,14 +128,53 @@ $(document).ready(function () {
         showQuestion(randomQuestion);
     
     });
-    // Check URL for participants
-    console.log("getting questions");
-    getQuestionsFromFile();
-    console.log("getting questions2");
-    console.log(questions);
 
+    
+
+    const greetingsArray = [
+        "Bonjour %NAME%",
+        "Salut %NAME%",
+        "Hola %NAME%",
+        "¿Qué tal, %NAME%?",
+        "Zdravstvuyte %NAME%",
+        "Privet %NAME%",
+        "Nǐ hǎo %NAME%",
+        "Salve %NAME%",
+        "Ciao %NAME%",
+        "Konnichiwa %NAME%",
+        "Guten Tag %NAME%",
+        "Hallo %NAME%",
+        "Olá %NAME%",
+        "Oi %NAME%",
+        "Anyoung haseyo %NAME%",
+        "Anyoung %NAME%",
+        "Asalaam alaikum %NAME%",
+        "Ahlan %NAME%",
+        "Goddag %NAME%",
+        "Hej %NAME%",
+        "Halløj %NAME%",
+        "Shikamoo %NAME%",
+        "Habari %NAME%",
+        "Hujambo %NAME%",
+        "Goedendag %NAME%",
+        "Hoi %NAME%",
+        "Yassas %NAME%",
+        "Yassou %NAME%",
+        "Dzień dobry %NAME%",
+        "Cześć %NAME%",
+        "Witaj %NAME%",
+        "Selamat siang %NAME%",
+        "Halo %NAME%",
+        "Namaste %NAME%",
+        "Namaskar %NAME%",
+        "God dag %NAME%",
+        "Hei %NAME%",
+        "Merhaba %NAME%",
+        "Selam %NAME%",
+        "Shalom %NAME%",
+        "Tjena %NAME%"];
+            
     var urlParams = new URLSearchParams(window.location.search);
-
     if (urlParams.has('participants')) {
         participantsUrl = urlParams.get('participants');
         if (participantsUrl.length != 0) {
