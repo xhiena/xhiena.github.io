@@ -74,7 +74,7 @@ $(document).ready(function () {
                 return question.trim() !== '';
             });
             
-            if (questions.length === 0) {
+            if (questionsfromfile.length === 0) {
                 alert('No questions found.');
                 return;
             }
