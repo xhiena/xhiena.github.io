@@ -1,0 +1,41 @@
+Bonjour	%NAME%
+Salut %NAME%
+Hola %NAME%
+¿Qué tal, %NAME%?
+Zdravstvuyte %NAME%
+Privet %NAME%
+Nǐ hǎo %NAME%
+Salve %NAME%
+Ciao %NAME%
+Konnichiwa %NAME%
+Guten Tag %NAME%
+Hallo %NAME%
+Olá %NAME%
+Oi %NAME%
+Anyoung haseyo %NAME%
+Anyoung %NAME%
+Asalaam alaikum %NAME%
+Ahlan %NAME%
+Goddag %NAME%
+Hej %NAME%
+Halløj %NAME%
+Shikamoo %NAME% 
+Habari %NAME%
+Hujambo %NAME%
+Goedendag %NAME%
+Hoi %NAME%
+Yassas %NAME%
+Yassou %NAME%
+Dzień dobry %NAME%
+Cześć %NAME%
+Witaj %NAME%
+Selamat siang	%NAME% 
+Halo %NAME%
+Namaste %NAME%
+Namaskar %NAME%
+God dag %NAME%
+Hei %NAME%
+Merhaba %NAME%
+Selam %NAME%
+Shalom %NAME%
+Tjena %NAME%
