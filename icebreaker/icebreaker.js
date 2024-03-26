@@ -69,19 +69,7 @@ $(document).ready(function () {
     }
     
     function getQuestionsFromFile(){
-        $.get('questions.txt', function (data) {
-            var questionsFromFile = data.split('\n').filter(function (question) {
-                return question.trim() !== '';
-            });
-            
-            if (questionsFromFile.length === 0) {
-                alert('No questions found.');
-                return;
-            }
-            console.log(questionsFromFile);
-            questions=questionsFromFile;
-            return questionsFromFile;
-        });
+        
     }
 
     function getQuestion(){
@@ -100,10 +88,31 @@ $(document).ready(function () {
             alert('Please add at least two participants.');
             return;
         }
+
         var randomParticipant = getParticipant();
-        var randomQuestion = getQuestion();
         currentParticipant = randomParticipant;
-        showQuestion(randomQuestion);
+        if(questions.length==0){ //1st run
+            $.get('questions.txt', function (data) {
+                var questionsFromFile = data.split('\n').filter(function (question) {
+                    return question.trim() !== '';
+                });
+                
+                if (questionsFromFile.length === 0) {
+                    alert('No questions found.');
+                    return;
+                }
+                console.log(questionsFromFile);
+                questions=questionsFromFile;
+                randomQuestion = getQuestion();
+                showQuestion(randomQuestion);
+            });
+        }
+        else{
+            randomQuestion = getQuestion();
+            showQuestion(randomQuestion);
+        }
+        
+        
     }
 
     // Start icebreaker
