@@ -2,19 +2,7 @@ $(document).ready(function () {
     var participants = [];
     var currentParticipant = null;
     var questions=[];
-    // Check URL for participants
-    var urlParams = new URLSearchParams(window.location.search);
-    questions=getQuestionsfromFile();
-    if (urlParams.has('participants')) {
-        participantsUrl = urlParams.get('participants');
-        if (participantsUrl.length != 0) {
-            participants = participantsUrl.split(',');
-        }
-        updateParticipantsList();
-        if (participants.length >= 2) {
-            startIcebreaker(); // Automatically start icebreaker with existing participants
-        }
-    }
+    
 
     // Add participant
     $('#icebreakerForm').submit(function (e) {
@@ -80,7 +68,7 @@ $(document).ready(function () {
         window.history.replaceState({}, '', newURL);
     }
     
-    function getQuestionsfromfile(){
+    function getQuestionsfromFile(){
         $.get('questions.txt', function (data) {
             var questionsfromfile = data.split('\n').filter(function (question) {
                 return question.trim() !== '';
@@ -131,4 +119,17 @@ $(document).ready(function () {
         showQuestion(randomQuestion);
     
     });
+    // Check URL for participants
+    var urlParams = new URLSearchParams(window.location.search);
+    questions=getQuestionsfromFile();
+    if (urlParams.has('participants')) {
+        participantsUrl = urlParams.get('participants');
+        if (participantsUrl.length != 0) {
+            participants = participantsUrl.split(',');
+        }
+        updateParticipantsList();
+        if (participants.length >= 2) {
+            startIcebreaker(); // Automatically start icebreaker with existing participants
+        }
+    }
 });
