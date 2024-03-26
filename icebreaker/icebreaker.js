@@ -99,7 +99,6 @@ $(document).ready(function () {
                     alert('No questions found.');
                     return;
                 }
-                console.log(questionsFromFile);
                 questions=questionsFromFile;
                 randomQuestion = getQuestion();
                 showQuestion(randomQuestion);
