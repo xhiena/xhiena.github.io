@@ -78,6 +78,7 @@ $(document).ready(function () {
                 alert('No questions found.');
                 return;
             }
+            console.log(questionsfromfile);
             return questionsfromfile;
         });
     }
@@ -122,6 +123,7 @@ $(document).ready(function () {
     // Check URL for participants
     var urlParams = new URLSearchParams(window.location.search);
     questions=getQuestionsfromFile();
+    console.log(questions);
     if (urlParams.has('participants')) {
         participantsUrl = urlParams.get('participants');
         if (participantsUrl.length != 0) {
