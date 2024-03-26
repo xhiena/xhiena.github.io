@@ -68,18 +68,19 @@ $(document).ready(function () {
         window.history.replaceState({}, '', newURL);
     }
     
-    function getQuestionsfromFile(){
+    function getQuestionsFromFile(){
         $.get('questions.txt', function (data) {
-            var questionsfromfile = data.split('\n').filter(function (question) {
+            var questionsFromFile = data.split('\n').filter(function (question) {
                 return question.trim() !== '';
             });
             
-            if (questionsfromfile.length === 0) {
+            if (questionsFromFile.length === 0) {
                 alert('No questions found.');
                 return;
             }
-            console.log(questionsfromfile);
-            return questionsfromfile;
+            console.log(questionsFromFile);
+            questions=questionsFromFile;
+            return questionsFromFile;
         });
     }
 
@@ -121,9 +122,13 @@ $(document).ready(function () {
     
     });
     // Check URL for participants
-    var urlParams = new URLSearchParams(window.location.search);
-    questions=getQuestionsfromFile();
+    console.log("getting questions");
+    getQuestionsFromFile();
+    console.log("getting questions2");
     console.log(questions);
+
+    var urlParams = new URLSearchParams(window.location.search);
+
     if (urlParams.has('participants')) {
         participantsUrl = urlParams.get('participants');
         if (participantsUrl.length != 0) {
