@@ -1,9 +1,10 @@
 $(document).ready(function () {
     var participants = [];
     var currentParticipant = null;
-
+    var questions=[];
     // Check URL for participants
     var urlParams = new URLSearchParams(window.location.search);
+    questions=getQuestionsfromFile();
     if (urlParams.has('participants')) {
         participantsUrl = urlParams.get('participants');
         if (participantsUrl.length != 0) {
@@ -78,57 +79,45 @@ $(document).ready(function () {
         var newURL = window.location.origin + window.location.pathname + '?participants=' + encodeURIComponent(participantsText);
         window.history.replaceState({}, '', newURL);
     }
+    
+    function getQuestionsfromfile(){
+        $.get('questions.txt', function (data) {
+            var questionsfromfile = data.split('\n').filter(function (question) {
+                return question.trim() !== '';
+            });
+            
+            if (questions.length === 0) {
+                alert('No questions found.');
+                return;
+            }
+            return questionsfromfile;
+        });
+    }
 
+    function getQuestion(){
+        return questions[Math.floor(Math.random() * questions.length)];
+    }
+    function getParticipant(){
+        return participants[Math.floor(Math.random() * participants.length)];
+    }
     // Start icebreaker with existing participants
+    function showQuestion(q){
+        $('#questionDisplay').text(currentParticipant + ', ' + q);
+    }
     function startIcebreaker() {
         if (participants.length < 2) {
             alert('Please add at least two participants.');
             return;
         }
-
-        // Load questions from file
-        $.get('questions.txt', function (data) {
-            var questions = data.split('\n').filter(function (question) {
-                return question.trim() !== '';
-            });
-
-            if (questions.length === 0) {
-                alert('No questions found.');
-                return;
-            }
-
-            var randomParticipant = participants[Math.floor(Math.random() * participants.length)];
-            var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-
-            currentParticipant = randomParticipant;
-            $('#questionDisplay').text(randomParticipant + ', ' + randomQuestion);
-        });
+        var randomParticipant = getParticipant();
+        var randomQuestion = getQuestion();
+        currentParticipant = randomParticipant;
+        showQuestion(randomQuestion);
     }
 
     // Start icebreaker
     $('#startButton').click(function () {
-        if (participants.length < 2) {
-            alert('Please add at least two participants.');
-            return;
-        }
-
-        // Load questions from file
-        $.get('questions.txt', function (data) {
-            var questions = data.split('\n').filter(function (question) {
-                return question.trim() !== '';
-            });
-
-            if (questions.length === 0) {
-                alert('No questions found.');
-                return;
-            }
-
-            var randomParticipant = participants[Math.floor(Math.random() * participants.length)];
-            var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-
-            currentParticipant = randomParticipant;
-            $('#questionDisplay').text(randomParticipant + ', ' + randomQuestion);
-        });
+        startIcebreaker();
     });
 
     // Ask another question to the same participant
@@ -137,21 +126,8 @@ $(document).ready(function () {
             alert('Please start the icebreaker first.');
             return;
         }
-
-        // Load questions from file
-        $.get('questions.txt', function (data) {
-            var questions = data.split('\n').filter(function (question) {
-                return question.trim() !== '';
-            });
-
-            if (questions.length === 0) {
-                alert('No questions found.');
-                return;
-            }
-
-            var randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-
-            $('#questionDisplay').text(currentParticipant + ', ' + randomQuestion);
-        });
+        var randomQuestion = getQuestion();
+        showQuestion(randomQuestion);
+    
     });
 });
