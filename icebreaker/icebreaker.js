@@ -101,7 +101,7 @@ $(document).ready(function () {
                     alert('No questions found.');
                     return;
                 }
-                questions=questionsFromFile;
+                questions=questionsFromFile; 
                 randomQuestion = getQuestion();
                 showQuestion(randomQuestion);
             });
