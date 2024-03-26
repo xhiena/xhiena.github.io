@@ -102,7 +102,6 @@ $(document).ready(function () {
     }
     // Start icebreaker with existing participants
     function showQuestion(q){
-        $('#questionDisplay').text(currentParticipant + ', ' + q);
         $('#questionDisplay h3').text(currentParticipant);
         $('#questionDisplay p').text(q);
     }
