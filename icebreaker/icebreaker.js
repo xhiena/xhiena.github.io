@@ -78,10 +78,7 @@ $(document).ready(function () {
     // Start icebreaker with existing participants
     function showQuestion(q){
         randomGreeting=greetingsArray[Math.floor(Math.random() * greetingsArray.length)];
-        console.log(currentParticipant);
-        console.log(randomGreeting);
         fullName=randomGreeting.replace("%NAME%",currentParticipant);
-        console.log(fullName);
         $('#questionDisplay h2').text(fullName);
         $('#questionDisplay p').text(q);
     }
