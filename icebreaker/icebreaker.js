@@ -2,8 +2,6 @@ $(document).ready(function () {
     var participants = [];
     var currentParticipant = null;
     var questions=[];
-    var salutes=[]
-    
 
     // Add participant
     $('#icebreakerForm').submit(function (e) {
@@ -14,7 +12,6 @@ $(document).ready(function () {
             updateParticipantsList();
             updateURLParams();
             $('#participantInput').val('');
-            //alert('Participant added successfully!');
             if (participants.length >= 2) {
                 startIcebreaker();
             }
@@ -37,7 +34,6 @@ $(document).ready(function () {
         });
         updateParticipantsList();
         updateURLParams();
-        //alert('Participant removed successfully!');
     });
 
     // Share participants
@@ -87,7 +83,6 @@ $(document).ready(function () {
             alert('Please add at least two participants.');
             return;
         }
-
         var randomParticipant = getParticipant();
         currentParticipant = randomParticipant;
         if(questions.length==0){ //1st run
@@ -126,11 +121,7 @@ $(document).ready(function () {
         }
         var randomQuestion = getQuestion();
         showQuestion(randomQuestion);
-    
     });
-
-    
-
     const greetingsArray = [
         "Bonjour %NAME%",
         "Salut %NAME%",
