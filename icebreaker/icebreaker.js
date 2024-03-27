@@ -80,7 +80,9 @@ $(document).ready(function () {
         randomGreeting=greetingsArray[Math.floor(Math.random() * greetingsArray.length)];
         console.log(currentParticipant);
         console.log(randomGreeting);
-        $('#questionDisplay h3').text(randomGreeting.replace("%NAME%",currentParticipant));
+        fullName=randomGreeting.replace("%NAME%",currentParticipant);
+        console.log(fullName);
+        $('#questionDisplay h3').text(fullName);
         $('#questionDisplay p').text(q);
     }
     function startIcebreaker() {
