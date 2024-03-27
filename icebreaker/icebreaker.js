@@ -82,7 +82,7 @@ $(document).ready(function () {
         console.log(randomGreeting);
         fullName=randomGreeting.replace("%NAME%",currentParticipant);
         console.log(fullName);
-        $('#questionDisplay h3').text(fullName);
+        $('#questionDisplay h2').text(fullName);
         $('#questionDisplay p').text(q);
     }
     function startIcebreaker() {
